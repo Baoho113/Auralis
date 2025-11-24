@@ -133,5 +133,5 @@ This project is licensed under the **MIT License**.
 
 ##  Contact
 
-Have suggestions or want to collaborate?  
 Feel free to open an issue or reach out anytime!
+Contact one of our devs at s3958122@rmit.edu.vn 
