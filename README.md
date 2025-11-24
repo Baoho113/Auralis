@@ -1,137 +1,16 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Baoho113/Auralis-Image-Tagging-App/main/AuralisLogo.png
-" alt="Auralis Logo" width="320"/>
-</p>
+# React + Vite
 
-<h1 align="center">Auralis</h1>
-<p align="center"><i>Accessible Image Tagging for the Visually Impaired</i></p>
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-green" />
-  <img src="https://img.shields.io/badge/license-MIT-blue" />
-  <img src="https://img.shields.io/badge/build-passing-brightgreen" />
-  <img src="https://img.shields.io/badge/status-active-success" />
-  <img src="https://img.shields.io/badge/contributions-welcome-orange" />
-</p>
+Currently, two official plugins are available:
 
----
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-##  About the Project
+## React Compiler
 
-Auralis is an accessibility-focused web application that generates meaningful image descriptions and tags using AI.  
-It is built for visually impaired users who rely on screen readers and assistive technologies for digital navigation.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-Inspired by the mission-driven openness of projects like **ActivityWatch**, Auralis is:
+## Expanding the ESLint configuration
 
-- **Open-source**
-- **Transparent**
-- **Privacy-respecting**
-- **Community-driven**
-
-Auralis aims to improve access to visual information across the web by transforming images into rich, descriptive text that can be used in screen readers, alt-text fields, accessibility audits, and more.
-
----
-
-##  Features
-
-- **AI-Powered Image Tagging** – Generates descriptive labels and captions.
-- **Screen Reader Optimized** – Structured output for maximum clarity.
-- **Simple Drag-and-Drop Interface** – Fast and easy to use.
-- **Mobile-Friendly** – Fully responsive layout.
-- **Privacy-Friendly** – Designed to avoid storing user images.
-
----
-
-##  Technical Overview
-
-### **Architecture**
-
-Auralis uses a modern decoupled architecture:
-
-### **Frontend**
-
-- Framework: **React**
-- Styling: **TailwindCSS**
-- Accessibility standards: **WCAG 2.1 AA**
-- Screen-reader support via:
-  - ARIA roles
-  - Semantic HTML
-  - Keyboard navigation
-
-### **Backend**
-
-- Type: **Serverless API** or **Node.js backend**
-- Endpoints:
-  - `/api/tag` – accepts an image and returns tags + description
-- Handles:
-  - Image preprocessing
-  - Model request/response
-  - Safety/quality filtering
-
-### **AI Component**
-
-- Model: OpenAI Vision API 
-- Outputs:
-  - Caption (1–2 sentences)
-  - Object tags
-  - Scene/context enrichment
-- Accessibility formatting rules:
-  - Avoids overly technical language
-  - Prioritizes clarity and conciseness
-
-### **Deployment**
-
-- Hosting: **Vercel**
-- CI/CD: GitHub Actions (build + test)
-- Asset optimization via:
-  - React.js Image component 
-  - Image CDN
-
----
-
-##  Getting Started
----
-Clone the Repository
-git clone https://github.com/<your-username>/Auralis.git
-
-Navigate into the Project
-cd Auralis
-
-Install Dependencies
-npm install
-
-Run the Dev Server
-npm run dev
-
----
-##  Roadmap
-
-- AI image scan and generate description
-- Audio descriptions (text → speech)  
-- Batch image tagging  
-- Multi-language captions  
-- Browser extension (auto tag images)
-
----
-
-##  Contributing
-
-We welcome contributions from anyone!
-
-1. Fork the repo  
-2. Create your feature branch  
-3. Commit and push your code  
-4. Open a pull request  
-
----
-
-##  License
-
-This project is licensed under the **MIT License**.
-
----
-
-##  Contact
-
-Feel free to open an issue or reach out anytime!
-Contact one of our devs at s3958122@rmit.edu.vn 
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
