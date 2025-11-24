@@ -100,8 +100,9 @@ Install Dependencies
 npm install
 Run the Dev Server
 npm run dev
+```bash
 
-## 📦 Roadmap
+##  Roadmap
 
 - User accounts & history  
 - Audio descriptions (text → speech)  
