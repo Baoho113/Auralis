@@ -93,7 +93,7 @@ Auralis uses a modern decoupled architecture:
 
 ### **Clone the Repository**
 
-\`\`\`bash
+\`\`\`
 # Clone the repository
 git clone https://github.com/<your-username>/Auralis.git
 
