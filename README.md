@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="/mnt/data/622c73ec-0a3f-4ae8-9214-7721149b7438.png" alt="Auralis Logo" width="320"/>
+  <img src="https://raw.githubusercontent.com/Baoho113/Auralis-Image-Tagging-App/main/AuralisLogo.png
+" alt="Auralis Logo" width="320"/>
 </p>
 
 <h1 align="center">Auralis</h1>
