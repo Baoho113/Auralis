@@ -1,0 +1,41 @@
+.history-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+}
+
+.history-card {
+  border-radius: 0.9rem;
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  background-color: #ffffff;
+}
+
+.history-image {
+  height: 150px;
+  border-radius: 0.75rem;
+  background-color: #e5e7eb;
+  margin-bottom: 0.6rem;
+}
+
+.history-card-title {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem;
+}
+
+.history-card-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.history-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}

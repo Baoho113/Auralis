@@ -1,0 +1,25 @@
+.error-page {
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.error-icon {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-title {
+  color: #d32f2f;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.error-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}

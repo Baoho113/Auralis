@@ -1,0 +1,56 @@
+.settings-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.settings-form {
+  margin-top: 0.5rem;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.settings-label {
+  font-weight: 600;
+}
+
+.settings-segmented {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background-color: #f9fafb;
+}
+
+.settings-segment {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.settings-segment.active {
+  background-color: var(--green);
+  color: #ffffff;
+}
+
+.settings-save {
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+  .settings-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

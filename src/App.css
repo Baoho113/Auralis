@@ -1,0 +1,42 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3rem;
+  background-color: var(--bg-page);
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: var(--green);
+  border-color: var(--green);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--green-dark);
+}
+
+.btn-outline {
+  background-color: #ffffff;
+  border-color: var(--green);
+  color: var(--green-dark);
+}
+
+.btn-outline:hover {
+  background-color: var(--green-soft);
+}

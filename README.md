@@ -1,6 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Baoho113/Auralis-Image-Tagging-App/main/AuralisLogo.png
-" alt="Auralis Logo" width="320"/>
+  <img src="./public/auralis-logo.png" alt="Auralis Logo" width="320"/>
 </p>
 
 <h1 align="center">Auralis</h1>
@@ -128,10 +127,3 @@ We welcome contributions from anyone!
 ##  License
 
 This project is licensed under the **MIT License**.
-
----
-
-##  Contact
-
-Feel free to open an issue or reach out anytime!
-Contact one of our devs at s3958122@rmit.edu.vn 
