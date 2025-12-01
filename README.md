@@ -90,7 +90,7 @@ Auralis uses a modern decoupled architecture:
 ##  Getting Started
 ---
 Clone the Repository
-git clone https://github.com/<your-username>/Auralis.git
+git clone https://github.com/Baoho113/Auralis.git
 
 Navigate into the Project
 cd Auralis
