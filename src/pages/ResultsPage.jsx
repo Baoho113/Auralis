@@ -1,6 +1,6 @@
 import "./ResultsPage.css";
 
-const mockTags = ["nature", "tree", "outdoor", "cloud"];
+const mockTags = ["default data"];
 
 const ResultsPage = () => {
   return (
@@ -11,7 +11,7 @@ const ResultsPage = () => {
         <section className="results-preview" aria-label="Image preview">
           <h2 className="results-section-title">Image Preview</h2>
           <div className="results-preview-box">
-            <div className="results-preview-placeholder">Image goes here</div>
+            <div className="results-preview-placeholder">Function not implement yet</div>
           </div>
         </section>
 
@@ -32,9 +32,7 @@ const ResultsPage = () => {
           <div className="results-description">
             <h3>Description</h3>
             <p>
-              A lush, vibrant green tree stands alone in an open grassy field
-              under a bright blue sky with scattered white clouds, creating a
-              calm and peaceful natural scene.
+              Image description go here after the function is implemented. Long is taking care of this part
             </p>
           </div>
         </section>
