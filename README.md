@@ -50,7 +50,6 @@ Auralis uses a modern decoupled architecture:
 ### **Frontend**
 
 - Framework: **React**
-- Styling: **TailwindCSS**
 - Accessibility standards: **WCAG 2.1 AA**
 - Screen-reader support via:
   - ARIA roles
