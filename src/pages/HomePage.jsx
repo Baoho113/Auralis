@@ -1,79 +1,144 @@
-import { useEffect, useState } from "react";
-import ImageUploadButton from "../components/ImageUploadButton";
+import React, { useEffect, useRef, useState } from "react";
+import Navbar from "../components/Navbar";
 import "./HomePage.css";
 
-const HomePage = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+const slides = [
+  {
+    id: 1,
+    image: "/Images/img1.png",
+    title: "Image 01",
+    description:
+      "A tranquil moonlit river winds through a valley of cherry blossoms and wooden houses, framed by towering mountains and a glowing full moon.",
+  },
+  {
+    id: 2,
+    image: "/Images/img2.jpg",
+    title: "Image 02",
+    description:
+      "A massive waterfall cascades down jungle-covered cliffs into a misty gorge, with distant rock spires and birds gliding through the humid air.",
+  },
+  {
+    id: 3,
+    image: "/Images/img3.jpg",
+    title: "Image 03",
+    description:
+      "LAt sunset, a lone traveler stands by a rocky shore, gazing toward a bridge and a glowing city nestled between rolling hills and golden skies.",
+  },
+  {
+    id: 4,
+    image: "/Images/img4.jpg",
+    title: "Image 04",
+    description:
+      "In a stormy, desolate landscape, a colossal alien structure rises from jagged rock, pulsing with red lights against dark clouds and distant mountains.",
+  },
+  {
+    id: 5,
+    image: "/Images/img5.jpg",
+    title: "Image 05",
+    description:
+      "Gigantic stone statues stand atop sea cliffs above a misty bay and distant fortress city, while a robed figure watches from a rocky ledge.",
+  },
+];
 
-  const handleFileSelect = (file) => {
-    setSelectedFile(file);
+const AUTO_PLAY_DELAY = 5000;
+
+export default function HomePage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef(null);
+  const thumbnailRefs = useRef([]);
+
+  const startAutoPlay = () => {
+    stopAutoPlay();
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, AUTO_PLAY_DELAY);
+  };
+
+  const stopAutoPlay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   };
 
   useEffect(() => {
-    if (!selectedFile) {
-      setPreviewUrl("");
-      return;
+    startAutoPlay();
+    return () => stopAutoPlay();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const currentThumb = thumbnailRefs.current[activeIndex];
+    if (!currentThumb) return;
+
+    const rect = currentThumb.getBoundingClientRect();
+    if (rect.left < 0 || rect.right > window.innerWidth) {
+      currentThumb.scrollIntoView({ behavior: "smooth", inline: "nearest" });
     }
+  }, [activeIndex]);
 
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setPreviewUrl(objectUrl);
+  const goToSlide = (index) => {
+    setActiveIndex(index);
+    startAutoPlay();
+  };
 
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
+  const goNext = () => {
+    goToSlide((activeIndex + 1) % slides.length);
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!selectedFile && !imageUrl.trim()) {
-      alert("Please upload an image or paste an image URL first.");
-      return;
-    }
-
-    console.log("Selected file:", selectedFile);
-    console.log("Pasted URL:", imageUrl);
+  const goPrev = () => {
+    goToSlide((activeIndex - 1 + slides.length) % slides.length);
   };
 
   return (
-    <section className="home-page">
-      <h1 className="home-title">Understand Images. Effortlessly.</h1>
-      <p className="home-subtitle">
-        Upload an image or paste a URL to receive a clear, AI-generated
-        description optimized for screen readers.
-      </p>
+    <div className="homepage">
+      <header className="homepage-header">
+        <Navbar />
+      </header>
+      {/* Hero section with Image */}
+      <section className="homepage-hero">
+        <div className="homepage-hero-list">
+          {slides.map((slide, index) => (
+            <article
+              key={slide.id}
+              className={`homepage-hero-item ${index === activeIndex ? "active" : ""
+                }`}
+            >
+              <img src={slide.image} alt={slide.title} />
+              <div className="hero-slide-content">
+                <h2>{slide.title}</h2>
+                <p>{slide.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
 
-      <form className="home-upload-form" onSubmit={handleSubmit}>
-        <ImageUploadButton onFileSelect={handleFileSelect} />
-        <span className="home-upload-or">OR</span>
-        <input
-          type="url"
-          className="home-input-url"
-          placeholder="Paste Image URL"
-          aria-label="Paste Image URL"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
-        <button type="submit" className="btn btn-primary">
-          Analyze
-        </button>
-      </form>
+        {/* Image controls */}
+        <div className="homepage-hero-arrows">
+          <button type="button" onClick={goPrev}>
+            {"<"}
+          </button>
+          <button type="button" onClick={goNext}>
+            {">"}
+          </button>
+        </div>
 
-      {selectedFile && (
-        <p className="home-file-name">Selected: {selectedFile.name}</p>
-      )}
-
-      {previewUrl && (
-        <img
-          src={previewUrl}
-          alt="Selected preview"
-          className="home-preview"
-        />
-      )}
-
-      <p className="home-aria-status">ARIA-Live Region: Ready for analysis</p>
-    </section>
+        {/* Thumbnail strip */}
+        <div className="homepage-hero-thumbnails">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className={`homepage-hero-thumbnail ${index === activeIndex ? "active" : ""
+                }`}
+              onClick={() => goToSlide(index)}
+              ref={(el) => (thumbnailRefs.current[index] = el)}
+            >
+              <img src={slide.image} alt={slide.title} />
+              <div className="hero-thumbnail-content">Name Image</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   );
-};
-
-export default HomePage;
+}
