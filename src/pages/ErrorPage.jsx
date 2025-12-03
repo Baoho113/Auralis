@@ -1,21 +1,73 @@
-import "./ErrorPage.css";
+import React from "react";
+import "./errorpage.css";
 
-const ErrorPage = () => {
+const ErrorPage = ({ onUploadAnother, onRetry, onBackHome }) => {
+  const handleUploadAnother = () => {
+    if (onUploadAnother) onUploadAnother();
+  };
+
+  const handleRetry = () => {
+    if (onRetry) onRetry();
+  };
+
+  const handleBackHome = () => {
+    if (onBackHome) {
+      onBackHome();
+    } else {
+      window.location.href = "/";
+    }
+  };
+
   return (
-    <section className="error-page">
-      <div className="error-icon" aria-hidden="true">
-        ⚠️
-      </div>
-      <h1 className="error-title">Image Analysis Failed!</h1>
-      <p className="error-message">
-        The image link may be invalid, or the file is unsupported.
-      </p>
+    <div className="error-page">
+      <main className="error-main">
+        <section className="error-card">
+          <div className="error-icon">⚠️</div>
 
-      <div className="error-actions">
-        <button className="btn btn-primary">Upload another image</button>
-        <button className="btn btn-outline">Try again</button>
-      </div>
-    </section>
+          <h1 className="error-title">Something went wrong!</h1>
+          <p className="error-subtitle">We couldn’t analyze your image.</p>
+
+          <p className="error-description">Possible reasons:</p>
+          <ul className="error-list">
+            <li>Invalid link</li>
+            <li>
+              Unsupported file type (only <strong>JPG/PNG</strong>)
+            </li>
+            <li>
+              File too large (max <strong>10MB</strong>)
+            </li>
+          </ul>
+
+          <div className="error-actions">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleUploadAnother}
+            >
+              Upload another image
+            </button>
+
+            <span className="error-or">OR</span>
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleRetry}
+            >
+              Try again
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="error-back-link"
+            onClick={handleBackHome}
+          >
+            Back to Home
+          </button>
+        </section>
+      </main>
+    </div>
   );
 };
 
