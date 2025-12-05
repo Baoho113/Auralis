@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# env / secrets
+.env
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs
+*.log
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+
+# build artifacts (if you ever add them)
+dist/
+build/

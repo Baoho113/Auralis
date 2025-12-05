@@ -5,38 +5,38 @@ import "./HomePage.css";
 const slides = [
   {
     id: 1,
-    image: "/Images/img1.png",
+    image: "/Images/img1.jpg",
     title: "Image 01",
     description:
-      "A tranquil moonlit river winds through a valley of cherry blossoms and wooden houses, framed by towering mountains and a glowing full moon.",
+      "A snow-capped mountain rising under a clear blue sky. A river flows in the foreground with dark blue, rippling water. Along the green riverbank, rows of pink cherry blossoms are in full bloom.",
   },
   {
     id: 2,
     image: "/Images/img2.jpg",
     title: "Image 02",
     description:
-      "A massive waterfall cascades down jungle-covered cliffs into a misty gorge, with distant rock spires and birds gliding through the humid air.",
+      "A modern city skyline at night, with tall skyscrapers and a prominent tower lit up against a deep blue sky. The colorful lights of the buildings create vivid reflections on the calm water in front. The whole scene feels lively and bright with a crisp, clear horizon.",
   },
   {
     id: 3,
     image: "/Images/img3.jpg",
     title: "Image 03",
     description:
-      "LAt sunset, a lone traveler stands by a rocky shore, gazing toward a bridge and a glowing city nestled between rolling hills and golden skies.",
+      "A abstract painting filled with swirling patterns of turquoise, pink, orange, black, and white. The colors twist and blend like liquid, making a striking marbled effect. There is no clear subject, just flowing dynamic shapes and textures.",
   },
   {
     id: 4,
     image: "/Images/img4.jpg",
     title: "Image 04",
     description:
-      "In a stormy, desolate landscape, a colossal alien structure rises from jagged rock, pulsing with red lights against dark clouds and distant mountains.",
+      "A Venn diagram comparing apples and oranges. Two overlapping circles list unique traits for each fruit, such as color and skin texture. In the overlapping center, shared qualities like being fruits that grow on trees and can be juiced are written.",
   },
   {
     id: 5,
     image: "/Images/img5.jpg",
     title: "Image 05",
     description:
-      "Gigantic stone statues stand atop sea cliffs above a misty bay and distant fortress city, while a robed figure watches from a rocky ledge.",
+      "A black-and-white portrait of an elderly man with wild, white hair. He has a mustache, deep-set eyes, and a thoughtful, slightly serious expression. He wears a textured buttoned coat, with the background softly blurred behind him.",
   },
 ];
 
@@ -134,7 +134,6 @@ export default function HomePage() {
               ref={(el) => (thumbnailRefs.current[index] = el)}
             >
               <img src={slide.image} alt={slide.title} />
-              <div className="hero-thumbnail-content">Name Image</div>
             </div>
           ))}
         </div>
