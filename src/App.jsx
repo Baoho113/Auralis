@@ -1,13 +1,10 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import UploadPage from "./pages/UploadPage";
 import ErrorPage from "./pages/ErrorPage";
 import HomePage from "./pages/HomePage";
 import ResultsPage from "./pages/ResultsPage";
 import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
-import HelpPage from "./pages/HelpPage";
-
 import LayoutWithNavbar from "./layouts/LayoutWithNavbar";
 import LayoutNoNavbar from "./layouts/LayoutNoNavbar";
 
@@ -29,7 +26,6 @@ function App() {
           <Route path="/error" element={<ErrorPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/help" element={<HelpPage />} />
         </Route>
 
         {/* Fallback */}
