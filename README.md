@@ -92,10 +92,10 @@ Auralis uses a modern decoupled architecture:
 Clone the Repository
 git clone https://github.com/Baoho113/Auralis.git
 
-Navigate into the Project:
+- Navigate into the Project:
 cd Auralis
 
-Open Split terminal on the Project"
+- Open Split terminal on the Project"
 cd Auralis\backend
 npm install
 npm start
