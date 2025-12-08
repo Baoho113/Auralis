@@ -95,12 +95,13 @@ git clone https://github.com/Baoho113/Auralis.git
 - Navigate into the Project:
 cd Auralis
 
-- Open Split terminal on the Project"
+- Open Split terminal on the Project:
 cd Auralis\backend
-npm install
-npm start
+
 cd Auralis\src
+- Install dependencies:
 npm install
+- Run app:
 npm run dev
 
 ---
