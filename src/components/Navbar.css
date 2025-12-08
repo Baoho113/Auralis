@@ -22,6 +22,12 @@
   height: 32px;
   object-fit: contain;
 }
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
 .brand-icon {
   font-size: 1.35rem;
 }

@@ -1,21 +1,66 @@
+import { useState } from "react";
 import "./SettingsPage.css";
 
 const SettingsPage = () => {
+  // State for settings
+  const [textSize, setTextSize] = useState("small");
+  const [contrastMode, setContrastMode] = useState("normal");
+  const [speechSpeed, setSpeechSpeed] = useState("1.0");
+  const [language, setLanguage] = useState("en");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log({
+      textSize,
+      contrastMode,
+      speechSpeed,
+      language,
+    });
+  };
+
   return (
     <section className="settings-page">
       <h1 className="settings-title">Settings</h1>
 
-      <form className="settings-form">
+      <form className="settings-form" onSubmit={handleSubmit}>
         <div className="settings-row">
           <label className="settings-label">Text Size</label>
-          <div className="settings-segmented">
-            <button type="button" className="settings-segment active">
+          <div
+            className="settings-segmented"
+            role="radiogroup"
+            aria-label="Text size"
+          >
+            <button
+              type="button"
+              className={
+                "settings-segment" + (textSize === "small" ? " active" : "")
+              }
+              onClick={() => setTextSize("small")}
+              role="radio"
+              aria-checked={textSize === "small"}
+            >
               Small
             </button>
-            <button type="button" className="settings-segment">
+            <button
+              type="button"
+              className={
+                "settings-segment" + (textSize === "medium" ? " active" : "")
+              }
+              onClick={() => setTextSize("medium")}
+              role="radio"
+              aria-checked={textSize === "medium"}
+            >
               Medium
             </button>
-            <button type="button" className="settings-segment">
+            <button
+              type="button"
+              className={
+                "settings-segment" + (textSize === "large" ? " active" : "")
+              }
+              onClick={() => setTextSize("large")}
+              role="radio"
+              aria-checked={textSize === "large"}
+            >
               Large
             </button>
           </div>
@@ -23,11 +68,33 @@ const SettingsPage = () => {
 
         <div className="settings-row">
           <label className="settings-label">Contrast Mode</label>
-          <div className="settings-segmented">
-            <button type="button" className="settings-segment active">
+          <div
+            className="settings-segmented"
+            role="radiogroup"
+            aria-label="Contrast mode"
+          >
+            <button
+              type="button"
+              className={
+                "settings-segment" +
+                (contrastMode === "normal" ? " active" : "")
+              }
+              onClick={() => setContrastMode("normal")}
+              role="radio"
+              aria-checked={contrastMode === "normal"}
+            >
               Normal
             </button>
-            <button type="button" className="settings-segment">
+            <button
+              type="button"
+              className={
+                "settings-segment" +
+                (contrastMode === "high" ? " active" : "")
+              }
+              onClick={() => setContrastMode("high")}
+              role="radio"
+              aria-checked={contrastMode === "high"}
+            >
               High Contrast
             </button>
           </div>
@@ -35,26 +102,75 @@ const SettingsPage = () => {
 
         <div className="settings-row">
           <label className="settings-label">Text-to-Speech Speed</label>
-          <div className="settings-segmented">
-            <button type="button" className="settings-segment">
+          <div
+            className="settings-segmented"
+            role="radiogroup"
+            aria-label="Text to speech speed"
+          >
+            <button
+              type="button"
+              className={
+                "settings-segment" + (speechSpeed === "0.8" ? " active" : "")
+              }
+              onClick={() => setSpeechSpeed("0.8")}
+              role="radio"
+              aria-checked={speechSpeed === "0.8"}
+            >
               0.8x
             </button>
-            <button type="button" className="settings-segment active">
+            <button
+              type="button"
+              className={
+                "settings-segment" + (speechSpeed === "1.0" ? " active" : "")
+              }
+              onClick={() => setSpeechSpeed("1.0")}
+              role="radio"
+              aria-checked={speechSpeed === "1.0"}
+            >
               1.0x
             </button>
-            <button type="button" className="settings-segment">
+            <button
+              type="button"
+              className={
+                "settings-segment" + (speechSpeed === "1.2" ? " active" : "")
+              }
+              onClick={() => setSpeechSpeed("1.2")}
+              role="radio"
+              aria-checked={speechSpeed === "1.2"}
+            >
               1.2x
             </button>
           </div>
         </div>
 
+        {/* Language */}
         <div className="settings-row">
           <label className="settings-label">Language</label>
-          <div className="settings-segmented">
-            <button type="button" className="settings-segment active">
+          <div
+            className="settings-segmented"
+            role="radiogroup"
+            aria-label="Language"
+          >
+            <button
+              type="button"
+              className={
+                "settings-segment" + (language === "en" ? " active" : "")
+              }
+              onClick={() => setLanguage("en")}
+              role="radio"
+              aria-checked={language === "en"}
+            >
               English
             </button>
-            <button type="button" className="settings-segment">
+            <button
+              type="button"
+              className={
+                "settings-segment" + (language === "vi" ? " active" : "")
+              }
+              onClick={() => setLanguage("vi")}
+              role="radio"
+              aria-checked={language === "vi"}
+            >
               Vietnamese
             </button>
           </div>
@@ -81,33 +197,69 @@ const SettingsPage = () => {
           </section>
 
           <section>
-            <h3 className="help-section-title">Keyboard Shortcuts</h3>
+            <h3 className="help-section-title">
+              Keyboard &amp; Braille Display Shortcuts
+            </h3>
+
+            <p className="help-body">
+              These shortcuts work on a standard keyboard and on most braille
+              displays that send the same keys (for example, the braille command
+              for Tab or Enter).
+            </p>
+
             <dl className="help-shortcuts">
-              <div>
-                <dt>Tab</dt>
-                <dd>Navigate forward</dd>
+              <div className="help-shortcut-row">
+                <dt>
+                  <span className="kbd">Tab</span>
+                </dt>
+                <dd>Move to the next button, link, or field.</dd>
               </div>
-              <div>
-                <dt>Shift + Tab</dt>
-                <dd>Navigate backward</dd>
+
+              <div className="help-shortcut-row">
+                <dt>
+                  <span className="kbd">Shift</span> +{" "}
+                  <span className="kbd">Tab</span>
+                </dt>
+                <dd>Move to the previous button, link, or field.</dd>
               </div>
-              <div>
-                <dt>Enter</dt>
-                <dd>Activate button</dd>
+
+              <div className="help-shortcut-row">
+                <dt>
+                  <span className="kbd">Enter</span> /{" "}
+                  <span className="kbd">Space</span>
+                </dt>
+                <dd>
+                  Activate the focused control (press a button, follow a link,
+                  etc.).
+                </dd>
               </div>
-              <div>
-                <dt>Space</dt>
-                <dd>Trigger action</dd>
+
+              <div className="help-shortcut-row">
+                <dt>
+                  <span className="kbd">Ctrl</span> +{" "}
+                  <span className="kbd">Alt</span> +{" "}
+                  <span className="kbd">H</span>
+                </dt>
+                <dd>Toggle High Contrast Mode.</dd>
               </div>
-              <div>
-                <dt>H</dt>
-                <dd>Toggle High Contrast Mode</dd>
-              </div>
-              <div>
-                <dt>P</dt>
-                <dd>Play Auto Description</dd>
+
+              <div className="help-shortcut-row">
+                <dt>
+                  <span className="kbd">Ctrl</span> +{" "}
+                  <span className="kbd">Alt</span> +{" "}
+                  <span className="kbd">P</span>
+                </dt>
+                <dd>Play or pause the image description.</dd>
               </div>
             </dl>
+
+            <p className="help-body help-body-small">
+              On a braille keyboard, use the chord that sends each of these keys
+              (for example, the braille command for{" "}
+              <span className="kbd">Tab</span> or{" "}
+              <span className="kbd">Enter</span>). Exact chords can vary
+              between braille devices.
+            </p>
           </section>
         </div>
       </section>
