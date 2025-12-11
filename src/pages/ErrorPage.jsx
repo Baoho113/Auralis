@@ -1,4 +1,3 @@
-import React from "react";
 import "./errorpage.css";
 
 const ErrorPage = ({ onUploadAnother, onRetry, onBackHome }) => {
