@@ -109,31 +109,65 @@ const UploadPage = () => {
     }
   };
 
-  const handleSave = () => {
-    if (!analysis) return;
+  const handleSave = async () => {
+    if (!analysis || isSaved) return;
 
-    const existing =
-      JSON.parse(localStorage.getItem("savedAnalyses") || "[]");
-
-    const topDescription = analysis.description?.captions?.[0]?.text || "";
-    const tags = (analysis.tags || []).map((t) => ({
-      name: t.name,
-      confidence: t.confidence,
-    }));
-
-    const newEntry = {
-      id: Date.now(),
-      sourceType: selectedFile ? "file" : "url",
-      fileName: selectedFile?.name || null,
-      imageUrl: !selectedFile ? imageUrl.trim() : null,
-      description: topDescription,
-      tags,
-      createdAt: new Date().toISOString(),
-    };
-
-    const updated = [...existing, newEntry];
-    localStorage.setItem("savedAnalyses", JSON.stringify(updated));
     setIsSaved(true);
+
+    try {
+      // 1. Get image source (preview from uploaded file OR direct URL)
+      const imageSrc = previewUrl || imageUrl.trim();
+      if (!imageSrc) throw new Error("No image source");
+
+      // 2. Load the image
+      const img = new Image();
+      img.crossOrigin = "anonymous"; // needed for external URLs
+      img.src = imageSrc;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = () => reject(new Error("Failed to load image"));
+      });
+
+      // 3. Create 300×300 thumbnail using canvas
+      const canvas = document.createElement("canvas");
+      canvas.width = 300;
+      canvas.height = 300;
+      const ctx = canvas.getContext("2d");
+
+      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+      const x = canvas.width / 2 - (img.width / 2) * scale;
+      const y = canvas.height / 2 - (img.height / 2) * scale;
+
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+      const thumbnail = canvas.toDataURL("image/jpeg", 0.8);
+
+      // 4. Prepare data for backend
+      const payload = {
+        description: analysis.description?.captions?.[0]?.text || "No description",
+        tags: (analysis.tags || []).map(t => ({
+          name: t.name,
+          confidence: t.confidence
+        })),
+        thumbnail,
+        imageSource: selectedFile ? "upload" : "url",
+        originalUrl: selectedFile ? undefined : imageUrl.trim()
+      };
+
+      // 5. Send to MongoDB
+      const res = await fetch(`${API_BASE_URL}/api/save-analysis`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
+    } catch (err) {
+      console.error("Save failed:", err);
+      alert("Could not save analysis. Check console/network.");
+      setIsSaved(false);
+    }
   };
 
   const topDescription = analysis?.description?.captions?.[0]?.text || "";
