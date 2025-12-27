@@ -103,7 +103,9 @@ cd Auralis\src
 npm install
 - Run app:
 npm run dev
+
 or docker compose up --build if you have Docker installed 
+
 ---
 ##  Roadmap
 
