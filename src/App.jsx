@@ -1,19 +1,25 @@
+import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import UploadPage from "./pages/UploadPage";
-import ErrorPage from "./pages/ErrorPage";
+import { useSettings } from "./context/SettingContext";
+
+import LayoutNoNavbar from "./layouts/LayoutNoNavbar";
+import LayoutWithNavbar from "./layouts/LayoutWithNavbar";
+
 import HomePage from "./pages/HomePage";
+import InfoPage from "./pages/InfoPage";
+import UploadPage from "./pages/UploadPage";
 import ResultsPage from "./pages/ResultsPage";
+import ErrorPage from "./pages/ErrorPage";
 import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
-import LayoutWithNavbar from "./layouts/LayoutWithNavbar";
-import LayoutNoNavbar from "./layouts/LayoutNoNavbar";
-import InfoPage from "./pages/InfoPage";
-
-import "./App.css";
 
 function App() {
+  const { textSize } = useSettings();
+  const { contrastMode } = useSettings();
+  console.log("App textSize:", textSize);
+
   return (
-    <div className="app">
+    <div className="app" data-text-size={textSize} data-contrast={contrastMode}>
       <Routes>
         {/* Routes WITHOUT navbar */}
         <Route element={<LayoutNoNavbar />}>
@@ -38,3 +44,4 @@ function App() {
 }
 
 export default App;
+

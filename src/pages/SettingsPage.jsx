@@ -1,23 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./SettingsPage.css";
+import { useSettings } from "../context/SettingContext";
+
 
 const SettingsPage = () => {
-  // State for settings
-  const [textSize, setTextSize] = useState("small");
-  const [contrastMode, setContrastMode] = useState("normal");
+  // Global settings from context
+  const { textSize, setTextSize, contrastMode, setContrastMode } =
+    useSettings();
+
+  // Local-only settings
   const [speechSpeed, setSpeechSpeed] = useState("1.0");
   const [language, setLanguage] = useState("en");
 
+  // UI feedback state
+  const [saved, setSaved] = useState(false);
+
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("userSettings");
+
+    if (stored) {
+      const parsed = JSON.parse(stored);
+
+      setTextSize(parsed.textSize || "small");
+      setContrastMode(parsed.contrastMode || "normal");
+      setSpeechSpeed(parsed.speechSpeed || "1.0");
+      setLanguage(parsed.language || "en");
+    }
+  }, [setTextSize, setContrastMode, setSpeechSpeed, setLanguage]);
+
+  // Save settings
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log({
+
+    const settings = {
       textSize,
       contrastMode,
       speechSpeed,
       language,
-    });
-  };
+    };
 
+    localStorage.setItem("userSettings", JSON.stringify(settings));
+
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
   return (
     <section className="settings-page">
       <h1 className="settings-title">Settings</h1>
@@ -176,8 +203,12 @@ const SettingsPage = () => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary settings-save">
-          Save Changes
+        <button
+          type="submit"
+          className="btn btn-primary settings-save"
+          aria-live="polite"
+        >
+          {saved ? "✓ Saved" : "Save Changes"}
         </button>
       </form>
 
