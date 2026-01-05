@@ -1,6 +1,10 @@
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useSettings } from "./context/SettingContext";
+import { useCookies } from "./context/CookieContext";
+
+import CookieBanner from "./components/CookieBanner";
+import CookieSettingsModal from "./components/CookieSettingsModal";
 
 import LayoutNoNavbar from "./layouts/LayoutNoNavbar";
 import LayoutWithNavbar from "./layouts/LayoutWithNavbar";
@@ -14,12 +18,20 @@ import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
 
 function App() {
-  const { textSize } = useSettings();
-  const { contrastMode } = useSettings();
-  console.log("App textSize:", textSize);
+  const { textSize, contrastMode } = useSettings();
+  const { showSettings } = useCookies(); // ensures re-render when modal opens
 
   return (
-    <div className="app" data-text-size={textSize} data-contrast={contrastMode}>
+    <div
+      className="app"
+      data-text-size={textSize}
+      data-contrast={contrastMode}
+    >
+      {/*  Cookie UI (global, layout-independent) */}
+      <CookieBanner />
+      {showSettings && <CookieSettingsModal />}
+
+      {/*  App routes */}
       <Routes>
         {/* Routes WITHOUT navbar */}
         <Route element={<LayoutNoNavbar />}>
@@ -44,4 +56,3 @@ function App() {
 }
 
 export default App;
-
