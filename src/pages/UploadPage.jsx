@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import ImageUploadButton from "../components/ImageUploadButton";
+import { saveHistoryItem } from "../utils/historyStorage";
+import { useCookies } from "../context/CookieContext";
 import "./UploadPage.css";
 
-const API_BASE_URL = "http://localhost:5000";
-
 const UploadPage = () => {
+  const { cookies } = useCookies();
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -35,37 +37,24 @@ const UploadPage = () => {
   }, [selectedFile]);
 
   const analyzeFile = async () => {
-    if (!selectedFile) return;
-
     const formData = new FormData();
     formData.append("image", selectedFile);
 
-    const response = await fetch(`${API_BASE_URL}/api/analyze-image-file`, {
+    const response = await fetch("http://localhost:5000/api/analyze-image-file", {
       method: "POST",
       body: formData,
     });
 
-    const text = await response.text();
-    let data = null;
-    try {
-      data = text ? JSON.parse(text) : null;
-    } catch {
-    }
-
+    const data = await response.json();
     if (!response.ok) {
-      const message =
-        data?.error || text || "Failed to analyze uploaded image";
-      throw new Error(message);
+      throw new Error(data?.error || "Failed to analyze image");
     }
 
     return data;
   };
 
-
   const analyzeUrl = async () => {
-    if (!imageUrl.trim()) return;
-
-    const response = await fetch(`${API_BASE_URL}/api/analyze-image`, {
+    const response = await fetch("http://localhost:5000/api/analyze-image", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageUrl: imageUrl.trim() }),
@@ -73,7 +62,7 @@ const UploadPage = () => {
 
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.error || "Failed to analyze image URL");
+      throw new Error(data?.error || "Failed to analyze image URL");
     }
 
     return data;
@@ -93,17 +82,11 @@ const UploadPage = () => {
     setIsSaved(false);
 
     try {
-      let result;
-      if (selectedFile) {
-        result = await analyzeFile();
-      } else {
-        result = await analyzeUrl();
-      }
-
+      const result = selectedFile ? await analyzeFile() : await analyzeUrl();
       setAnalysis(result);
     } catch (err) {
       console.error(err);
-      setError(err.message || "Something went wrong while analyzing.");
+      setError(err.message || "Analysis failed.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -112,65 +95,58 @@ const UploadPage = () => {
   const handleSave = async () => {
     if (!analysis || isSaved) return;
 
+    if (!cookies.functional) {
+      alert("History saving is disabled in cookie settings.");
+      return;
+    }
+
     setIsSaved(true);
 
     try {
-      // 1. Get image source (preview from uploaded file OR direct URL)
       const imageSrc = previewUrl || imageUrl.trim();
       if (!imageSrc) throw new Error("No image source");
 
-      // 2. Load the image
       const img = new Image();
-      img.crossOrigin = "anonymous"; // needed for external URLs
+      img.crossOrigin = "anonymous";
       img.src = imageSrc;
 
       await new Promise((resolve, reject) => {
         img.onload = resolve;
-        img.onerror = () => reject(new Error("Failed to load image"));
+        img.onerror = reject;
       });
 
-      // 3. Create 300×300 thumbnail using canvas
       const canvas = document.createElement("canvas");
       canvas.width = 300;
       canvas.height = 300;
       const ctx = canvas.getContext("2d");
 
-      const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+      const scale = Math.max(
+        canvas.width / img.width,
+        canvas.height / img.height
+      );
       const x = canvas.width / 2 - (img.width / 2) * scale;
       const y = canvas.height / 2 - (img.height / 2) * scale;
 
       ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
       const thumbnail = canvas.toDataURL("image/jpeg", 0.8);
 
-      // 4. Prepare data for backend
-      const payload = {
-        description: analysis.description?.captions?.[0]?.text || "No description",
-        tags: (analysis.tags || []).map(t => ({
-          name: t.name,
-          confidence: t.confidence
-        })),
-        thumbnail,
-        imageSource: selectedFile ? "upload" : "url",
-        originalUrl: selectedFile ? undefined : imageUrl.trim()
-      };
-
-      // 5. Send to MongoDB
-      const res = await fetch(`${API_BASE_URL}/api/save-analysis`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+      saveHistoryItem({
+        id: crypto.randomUUID(),
+        imageUrl: thumbnail,
+        prompt:
+          analysis.description?.captions?.[0]?.text ||
+          "No description available",
+        createdAt: new Date().toISOString(),
       });
-
-      if (!res.ok) throw new Error("Server error");
-
     } catch (err) {
       console.error("Save failed:", err);
-      alert("Could not save analysis. Check console/network.");
+      alert("Could not save analysis.");
       setIsSaved(false);
     }
   };
 
-  const topDescription = analysis?.description?.captions?.[0]?.text || "";
+  const description = analysis?.description?.captions?.[0]?.text || "";
   const tags = analysis?.tags || [];
 
   return (
@@ -190,16 +166,12 @@ const UploadPage = () => {
           type="url"
           className="upload-input-url"
           placeholder="Paste Image URL"
-          aria-label="Paste Image URL"
           value={imageUrl}
           onChange={(e) => {
             setImageUrl(e.target.value);
-            if (e.target.value) {
-              setSelectedFile(null);
-              setPreviewUrl("");
-            }
+            setSelectedFile(null);
+            setPreviewUrl("");
             setAnalysis(null);
-            setError("");
             setIsSaved(false);
           }}
         />
@@ -228,10 +200,9 @@ const UploadPage = () => {
           <>
             <h2>Image Analysis</h2>
 
-            {topDescription && (
+            {description && (
               <p className="upload-description">
-                <strong>Description: </strong>
-                {topDescription}
+                <strong>Description:</strong> {description}
               </p>
             )}
 
@@ -273,8 +244,8 @@ const UploadPage = () => {
         {isAnalyzing
           ? "Analyzing image..."
           : analysis
-            ? "Analysis complete."
-            : "ARIA-Live Region: Ready for analysis"}
+          ? "Analysis complete."
+          : "Ready for analysis"}
       </p>
     </section>
   );
