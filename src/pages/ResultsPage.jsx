@@ -113,7 +113,7 @@ const ResultsPage = () => {
           onClick={handleSave}
           disabled={isSaved}
         >
-          {isSaved ? "Saved ✅" : "Save analysis"}
+          {isSaved ? "Saved " : "Save analysis"}
         </button>
 
         <button
