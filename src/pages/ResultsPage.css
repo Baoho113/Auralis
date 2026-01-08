@@ -17,11 +17,21 @@
 }
 
 .results-preview-box {
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
-  padding: 0.75rem;
-  background-color: #f9fafb;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f4f4f4;
 }
+
+.results-preview-image {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  object-fit: contain;
+  display: block;
+}
+
 
 .results-preview-placeholder {
   height: 220px;
