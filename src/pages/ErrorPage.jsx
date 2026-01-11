@@ -1,4 +1,4 @@
-import "./errorpage.css";
+import "./Errorpage.css";
 
 const ErrorPage = ({ onUploadAnother, onRetry, onBackHome }) => {
   const handleUploadAnother = () => {
