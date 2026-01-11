@@ -9,6 +9,10 @@ import CookieSettingsModal from "./components/CookieSettingsModal";
 import LayoutNoNavbar from "./layouts/LayoutNoNavbar";
 import LayoutWithNavbar from "./layouts/LayoutWithNavbar";
 
+// Accessibility Imports
+import AriaAnnouncer from "./components/AriaAnnouncer";
+import { useKeyboardShortcuts } from './utils/useKeyboardShortcuts';
+
 import HomePage from "./pages/HomePage";
 import InfoPage from "./pages/InfoPage";
 import UploadPage from "./pages/UploadPage";
@@ -18,19 +22,24 @@ import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   const { textSize, contrastMode } = useSettings();
-  const { showSettings } = useCookies(); // ensures re-render when modal opens
-
+  const { showSettings } = useCookies(); 
+  
+  const { announcement } = useKeyboardShortcuts();
+  
   return (
     <div
       className="app"
       data-text-size={textSize}
       data-contrast={contrastMode}
     >
-      {/*  Cookie UI (global, layout-independent) */}
+      {/* 2. Braille & Screen Reader Announcer (Hidden visually) */}
+      <AriaAnnouncer message={announcement} />
+
+      {/* Cookie UI (global, layout-independent) */}
       <CookieBanner />
       {showSettings && <CookieSettingsModal />}
 
-      {/*  App routes */}
+      {/* App routes */}
       <Routes>
         {/* Routes WITHOUT navbar */}
         <Route element={<LayoutNoNavbar />}>
