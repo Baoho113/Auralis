@@ -36,7 +36,7 @@ const UploadPage = () => {
     formData.append("image", selectedFile);
 
     const response = await fetch(
-      "http://localhost:5000/api/analyze-image-file",
+      "https://auralis-production-9bdb.up.railway.app/api/analyze-image-file",
       {
         method: "POST",
         body: formData,
@@ -52,7 +52,7 @@ const UploadPage = () => {
   };
 
   const analyzeUrl = async () => {
-    const response = await fetch("http://localhost:5000/api/analyze-image", {
+    const response = await fetch("https://auralis-production-9bdb.up.railway.app/api/analyze-image", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ imageUrl: imageUrl.trim() }),

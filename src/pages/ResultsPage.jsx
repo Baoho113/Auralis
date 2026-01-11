@@ -37,7 +37,7 @@ const ResultsPage = () => {
 
     setIsGenerating(true);
     try {
-      const response = await fetch("http://localhost:5000/api/generate-description", {
+      const response = await fetch("https://auralis-production-9bdb.up.railway.app/api/generate-description", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

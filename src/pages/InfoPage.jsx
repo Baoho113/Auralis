@@ -29,7 +29,7 @@ const InfoPage = () => {
     setStatus({ type: "", message: "" });
 
     try {
-      const response = await fetch("http://localhost:5000/api/submit-feedback", {
+      const response = await fetch("https://auralis-production-9bdb.up.railway.app/api/submit-feedback", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
