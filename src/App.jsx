@@ -42,7 +42,6 @@ function App() {
           <Route path="/info" element={<InfoPage />} />
           <Route path="/upload" element={<UploadPage />} />
           <Route path="/results" element={<ResultsPage />} />
-          <Route path="/error" element={<ErrorPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
