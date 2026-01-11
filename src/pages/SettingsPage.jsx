@@ -208,7 +208,7 @@ const SettingsPage = () => {
           className="btn btn-primary settings-save"
           aria-live="polite"
         >
-          {saved ? "✓ Saved" : "Save Changes"}
+          {saved ? " Saved" : "Save Changes"}
         </button>
       </form>
 

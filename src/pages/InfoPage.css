@@ -67,6 +67,7 @@
   line-height: 1.5;
 }
 
+/* Feedback Section */
 .feedback-section {
   border-top: 1px solid #e0e0e0;
   padding-top: 2rem;
@@ -78,7 +79,7 @@
 }
 
 .feedback-row {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem; 
 }
 
 .feedback-label {
@@ -92,9 +93,10 @@
   width: 100%;
   border-radius: 0.6rem;
   border: 1px solid #d0d0d0;
-  padding: 0.6rem 0.75rem;
+  padding: 0.7rem 0.75rem; 
   font-size: 0.95rem;
   font-family: inherit;
+  box-sizing: border-box; 
 }
 
 .feedback-input:focus,
@@ -104,10 +106,33 @@
   border-color: #2f7c3c;
 }
 
+/* Feedback Status Messages */
+.feedback-status {
+  padding: 0.8rem 1rem;
+  border-radius: 0.6rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.feedback-status.success {
+  background-color: #ecfdf5; 
+  color: #065f46; 
+  border: 1px solid #a7f3d0;
+}
+
+.feedback-status.error {
+  background-color: #fef2f2; 
+  color: #991b1b; 
+  border: 1px solid #fecaca;
+}
+
+/* Submit Button */
 .feedback-submit {
   display: inline-block;
   margin-top: 0.5rem;
-  padding: 0.6rem 1.4rem;
+  padding: 0.7rem 1.6rem;
   border-radius: 999px;
   border: none;
   cursor: pointer;
@@ -115,10 +140,22 @@
   font-size: 0.95rem;
   background-color: #2f7c3c; 
   color: #ffffff;
+  transition: all 0.2s ease;
 }
 
-.feedback-submit:hover {
-  filter: brightness(0.95);
+.feedback-submit:hover:not(:disabled) {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.feedback-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.feedback-submit:disabled {
+  background-color: #9ca3af; 
+  cursor: not-allowed;
+  filter: none;
 }
 
 .feedback-submit:focus-visible {

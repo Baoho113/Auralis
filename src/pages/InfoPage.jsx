@@ -1,13 +1,62 @@
+import { useState } from "react";
 import "./InfoPage.css";
 
 const InfoPage = () => {
+  // 1. State for form fields
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    feedback: "",
+  });
+
+  // 2. State for UI feedback (loading, success, error)
+  const [status, setStatus] = useState({ type: "", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target; // This looks for the 'name' attribute
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // 3. Handle Form Submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setStatus({ type: "", message: "" });
+
+    try {
+      const response = await fetch("http://localhost:5000/api/submit-feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus({ type: "success", message: "Thank you! Your feedback has been sent." });
+        setFormData({ name: "", email: "", feedback: "" }); // Clear form
+      } else {
+        throw new Error(data.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setStatus({ type: "error", message: err.message });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="info-page" aria-labelledby="info-title">
       {/* Hero / Intro */}
       <section className="info-hero">
-        <h1 id="info-title" className="info-title">
-          About Auralis
-        </h1>
+        <h1 id="info-title" className="info-title">About Auralis</h1>
         <p className="info-subtitle">
           Auralis is an image tagging platform designed to help visually
           impaired users understand what&apos;s inside images through rich,
@@ -15,6 +64,7 @@ const InfoPage = () => {
         </p>
       </section>
 
+      {/* What Auralis Does Section */}
       <section className="info-section">
         <h2 className="info-section-title">What Auralis Does</h2>
         <div className="info-grid">
@@ -46,13 +96,13 @@ const InfoPage = () => {
         </div>
       </section>
 
+      {/* Meet the Team Section */}
       <section className="info-section">
         <h2 className="info-section-title">Meet the Team</h2>
         <p className="info-body">
-          The Auralis team is a small group of developers and designers who care
-          deeply about accessibility and inclusive technology. Our goal is to
+          The Auralis team is a group of 4 RMIT developers and designers. Our goal is to
           make visual content more understandable and usable for everyone,
-          regardless of their level of sight.
+          regardless of their level of sight. Especially in helping RMIT students with visual impairments to understand images better.
         </p>
 
         <div className="info-team-grid" aria-label="Development team">
@@ -80,6 +130,7 @@ const InfoPage = () => {
         </div>
       </section>
 
+      {/* Feedback Form Section */}
       <section className="info-section feedback-section">
         <h2 className="info-section-title">Share Your Feedback</h2>
         <p className="info-body">
@@ -87,28 +138,35 @@ const InfoPage = () => {
           well, what&apos;s confusing, or what you&apos;d like to see next.
         </p>
 
-        <form className="feedback-form">
+        <form className="feedback-form" onSubmit={handleSubmit}>
           <div className="feedback-row">
             <label htmlFor="feedback-name" className="feedback-label">
               Name (optional)
             </label>
             <input
               id="feedback-name"
+              name="name"  /* ADDED NAME */
               type="text"
               className="feedback-input"
               placeholder="Your name"
+              value={formData.name}
+              onChange={handleChange}
             />
           </div>
 
           <div className="feedback-row">
             <label htmlFor="feedback-email" className="feedback-label">
-              Email (optional)
+              Gmail Address (required for verification)
             </label>
             <input
               id="feedback-email"
+              name="email"
               type="email"
               className="feedback-input"
-              placeholder="you@example.com"
+              placeholder="yourname@gmail.com"
+              required /* Changed from optional to required */
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
 
@@ -118,15 +176,29 @@ const InfoPage = () => {
             </label>
             <textarea
               id="feedback-message"
+              name="feedback" /* ADDED NAME (MATCHES STATE KEY) */
               className="feedback-textarea"
               rows={5}
               placeholder="Tell us about your experience with Auralis..."
               required
+              value={formData.feedback}
+              onChange={handleChange}
             />
           </div>
 
-          <button type="submit" className="feedback-submit">
-            Send Feedback
+          {/* Success/Error Messages */}
+          {status.message && (
+            <p className={`feedback-status ${status.type}`} aria-live="polite">
+              {status.message}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="feedback-submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Sending..." : "Send Feedback"}
           </button>
         </form>
       </section>

@@ -165,12 +165,14 @@ const UploadPage = () => {
         <p className="upload-file-name">Selected: {selectedFile.name}</p>
       )}
 
-      {previewUrl && (
-        <img
-          src={previewUrl}
-          alt="Selected preview"
-          className="upload-preview"
-        />
+      {(previewUrl || imageUrl) && (
+        <div className="upload-preview-container">
+          <img
+            src={previewUrl || imageUrl}
+            alt="Selected preview"
+            className="upload-preview"
+          />
+        </div>
       )}
 
       {error && <p className="upload-error">{error}</p>}
