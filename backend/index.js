@@ -1,4 +1,3 @@
-// backend/index.js
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -7,12 +6,16 @@ import multer from "multer";
 import mongoose from "mongoose";
 import sharp from "sharp";
 import Analysis from "./models/Analysis.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const app = express();
 
 // middlewares
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
+
+// 2. Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -28,6 +31,35 @@ const AZURE_VISION_KEY = process.env.AZURE_VISION_KEY;
 if (!AZURE_VISION_ENDPOINT || !AZURE_VISION_KEY) {
   console.warn("AZURE_VISION_ENDPOINT or AZURE_VISION_KEY is missing in .env");
 }
+// 3. New Route: Generate Description using Gemini
+app.post("/api/generate-description", async (req, res) => {
+  const { tags, type } = req.body; // type can be 'short' or 'long'
+
+  if (!tags || !Array.isArray(tags)) {
+    return res.status(400).json({ error: "Tags are required as an array" });
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+    
+    // Extract tag names for the prompt
+    const tagList = tags.map(t => typeof t === 'string' ? t : t.name).join(", ");
+
+    const prompt = type === "long" 
+      ? `Write a detailed, vivid, and descriptive paragraph for an image that contains: ${tagList}. Focus on atmosphere, colors, and composition.`
+      : `Write a concise, catchy one-sentence caption for an image containing: ${tagList}.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ description: text });
+  } catch (error) {
+    console.error("Gemini AI Error:", error);
+    res.status(500).json({ error: "Failed to generate description with AI" });
+  }
+});
+
 
 // Helper: Generate thumbnail from buffer or URL
 async function generateThumbnail(imageBuffer = null, imageUrl = null) {

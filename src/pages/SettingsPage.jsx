@@ -22,7 +22,7 @@ const SettingsPage = () => {
     if (stored) {
       const parsed = JSON.parse(stored);
 
-      setTextSize(parsed.textSize || "small");
+      setTextSize(parsed.textSize || "medium");
       setContrastMode(parsed.contrastMode || "normal");
       setSpeechSpeed(parsed.speechSpeed || "1.0");
       setLanguage(parsed.language || "en");

@@ -4,7 +4,7 @@ const SettingsContext = createContext(null);
 
 export const SettingsProvider = ({ children }) => {
   const [textSize, setTextSize] = useState(() => {
-    return localStorage.getItem("textSize") || "small";
+    return localStorage.getItem("textSize") || "medium";
   });
 
   const [contrastMode, setContrastMode] = useState(() => {
