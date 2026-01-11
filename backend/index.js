@@ -12,7 +12,17 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const app = express();
 
 // middlewares
-app.use(cors());
+const corsOptions = {
+  origin: [
+    'https://auralis-psi.vercel.app/',  // Vercel URL của bạn
+    'http://localhost:5174/',            // Local development
+    'http://localhost:3000/'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json({ limit: "10mb" }));
 
 // 2. Initialize Gemini AI
