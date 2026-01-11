@@ -13,7 +13,6 @@ import HomePage from "./pages/HomePage";
 import InfoPage from "./pages/InfoPage";
 import UploadPage from "./pages/UploadPage";
 import ResultsPage from "./pages/ResultsPage";
-import ErrorPage from "./pages/ErrorPage";
 import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
 
