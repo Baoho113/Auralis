@@ -7,10 +7,7 @@ export const useKeyboardShortcuts = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // 1. Ignore if typing in a text field
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-      // 2. THE BRAILLE ADJUSTMENT:
 
       if (!e.altKey) return; 
 
@@ -25,10 +22,8 @@ export const useKeyboardShortcuts = () => {
       };
 
       if (routes[key]) {
-        // 3. Prevent the browser from opening its own menus (e.g., Alt+S)
         e.preventDefault(); 
         
-        // 4. Update the message for the Braille display
         setAnnouncement(""); 
         
         setTimeout(() => {
