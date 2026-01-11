@@ -14,9 +14,9 @@ const app = express();
 // middlewares
 const corsOptions = {
   origin: [
-    'https://auralis-psi.vercel.app/',  // Vercel URL của bạn
-    'http://localhost:5174/',            // Local development
-    'http://localhost:3000/'
+    'https://auralis-psi.vercel.app',  // Vercel URL của bạn
+    'http://localhost:5174',            // Local development
+    'http://localhost:3000'
   ],
   credentials: true,
   optionsSuccessStatus: 200
