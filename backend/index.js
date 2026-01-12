@@ -1,4 +1,3 @@
-// backend/index.js
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -7,12 +6,17 @@ import multer from "multer";
 import mongoose from "mongoose";
 import sharp from "sharp";
 import Analysis from "./models/Analysis.js";
+import Feedback from "./models/Feedback.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const app = express();
 
 // middlewares
 app.use(cors());
 app.use(express.json({ limit: "10mb" }));
+
+// 2. Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -28,6 +32,35 @@ const AZURE_VISION_KEY = process.env.AZURE_VISION_KEY;
 if (!AZURE_VISION_ENDPOINT || !AZURE_VISION_KEY) {
   console.warn("AZURE_VISION_ENDPOINT or AZURE_VISION_KEY is missing in .env");
 }
+// 3. Generate Description using Gemini
+app.post("/api/generate-description", async (req, res) => {
+  const { tags, type } = req.body; // type can be 'short' or 'long'
+
+  if (!tags || !Array.isArray(tags)) {
+    return res.status(400).json({ error: "Tags are required as an array" });
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+
+    // Extract tag names for the prompt
+    const tagList = tags.map(t => typeof t === 'string' ? t : t.name).join(", ");
+
+    const prompt = type === "long"
+      ? `Write a detailed, vivid, and descriptive paragraph for an image that contains: ${tagList}. Focus on atmosphere, colors, and composition.`
+      : `Write a concise, catchy one-sentence caption for an image containing: ${tagList}.`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ description: text });
+  } catch (error) {
+    console.error("Gemini AI Error:", error);
+    res.status(500).json({ error: "Failed to generate description with AI" });
+  }
+});
+
 
 // Helper: Generate thumbnail from buffer or URL
 async function generateThumbnail(imageBuffer = null, imageUrl = null) {
@@ -180,6 +213,52 @@ app.get("/api/history", async (req, res) => {
     res.status(500).json({ error: "Failed to load history" });
   }
 });
+// Submit User Feedback
+app.post("/api/submit-feedback", async (req, res) => {
+  const { name, email, feedback } = req.body;
+
+  // 1. Basic Validation
+  if (!feedback || !email) {
+    return res.status(400).json({ error: "Email and feedback are required" });
+  }
+
+  // 2. Gmail Format Validation (RegEx)
+  // Ensures it ends with @gmail.com and has valid characters before it
+  const gmailRegex = /^[a-z0-9](\.?[a-z0-9]){5,}@gmail\.com$/i;
+  if (!gmailRegex.test(email)) {
+    return res.status(400).json({ 
+      error: "Please provide a valid Gmail address (e.g., example@gmail.com)" 
+    });
+  }
+
+  try {
+    // 3. Check submission limit (Max 3)
+    const feedbackCount = await Feedback.countDocuments({ email: email.toLowerCase() });
+    
+    if (feedbackCount >= 3) {
+      return res.status(429).json({ 
+        error: "You have reached the maximum limit of 3 feedbacks for this Gmail address." 
+      });
+    }
+
+    // 4. Save to Database
+    const newFeedback = await Feedback.create({
+      name: name || "Anonymous",
+      email: email.toLowerCase(),
+      feedback
+    });
+
+    res.status(201).json({ 
+      success: true, 
+      message: "Feedback submitted successfully",
+      id: newFeedback._id 
+    });
+  } catch (error) {
+    console.error("Feedback submission error:", error);
+    res.status(500).json({ error: "Failed to save feedback" });
+  }
+});
+
 
 // fallback 404 in JSON so frontend doesn't get HTML
 app.use((req, res) => {

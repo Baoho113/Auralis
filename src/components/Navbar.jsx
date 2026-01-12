@@ -21,17 +21,39 @@ const Navbar = () => {
         </div>
 
         <nav className="nav-links" aria-label="Main navigation">
-          <NavLink to="/info" className={linkClass}>
+          <NavLink
+            to="/info"
+            className={linkClass}
+            accessKey="i"
+            aria-label="Info page, shortcut Alt plus I"
+          >
             Info
           </NavLink>
 
-          <NavLink to="/upload" className={linkClass}>
+          <NavLink
+            to="/upload"
+            className={linkClass}
+            accessKey="u"
+            aria-label="Upload page, shortcut Alt plus U"
+          >
             Upload
           </NavLink>
-          <NavLink to="/history" className={linkClass}>
+
+          <NavLink
+            to="/history"
+            className={linkClass}
+            accessKey="h"
+            aria-label="History page, shortcut Alt plus H"
+          >
             History
           </NavLink>
-          <NavLink to="/settings" className={linkClass}>
+
+          <NavLink
+            to="/settings"
+            className={linkClass}
+            accessKey="s"
+            aria-label="Settings page, shortcut Alt plus S"
+          >
             Setting
           </NavLink>
         </nav>

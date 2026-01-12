@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
 import "./HistoryPage.css";
 
-const API_BASE_URL = "http://localhost:5000";
+import {
+  loadHistory,
+  deleteHistoryItem,
+} from "../utils/historyStorage";
 
 const HistoryPage = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Load history on page load
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/history`)
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load");
-        return res.json();
-      })
-      .then(data => {
-        setHistory(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Could not load history");
-        setLoading(false);
-      });
+    const storedHistory = loadHistory();
+    setHistory(storedHistory);
+    setLoading(false);
   }, []);
+
+  const handleDelete = (id) => {
+    deleteHistoryItem(id);
+    setHistory(loadHistory());
+  };
 
   if (loading) {
     return <p className="history-loading">Loading history...</p>;
@@ -32,7 +30,10 @@ const HistoryPage = () => {
     return (
       <section className="history-page">
         <h1 className="history-title">History</h1>
-        <p>No saved analyses yet. Analyze an image and click "Save this analysis" to see it here!</p>
+        <p>
+          No saved analyses yet. Analyze an image and click
+          "Save this analysis" to see it here!
+        </p>
       </section>
     );
   }
@@ -45,18 +46,30 @@ const HistoryPage = () => {
         {history.map((item) => (
           <article key={item.id} className="history-card">
             <img
-              src={item.thumbnail}
-              alt={item.description}
+              src={item.imageUrl || item.thumbnail}
+              alt={item.description || item.prompt}
               className="history-image"
             />
+
             <p className="history-card-title">
-              {item.description.length > 70
-                ? item.description.substring(0, 70) + "..."
-                : item.description}
+              {(item.description || item.prompt).length > 70
+                ? (item.description || item.prompt).substring(0, 70) + "..."
+                : item.description || item.prompt}
             </p>
-            <p className="history-card-date">{item.date}</p>
+
+            <p className="history-card-date">
+              {item.date
+                ? item.date
+                : new Date(item.createdAt).toLocaleDateString()}
+            </p>
+
             <div className="history-card-actions">
-              <button className="btn btn-outline">Delete</button>
+              <button
+                className="btn btn-outline"
+                onClick={() => handleDelete(item.id)}
+              >
+                Delete
+              </button>
             </div>
           </article>
         ))}
